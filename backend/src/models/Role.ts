@@ -25,7 +25,7 @@ const Role = sequelize.define<Model<RoleAttributes, RoleCreationAttributes>>(
       allowNull: false,
     },
     departmentId: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false, //each role associated with a department id
     },
     allowMultiple: {

@@ -3,6 +3,7 @@ import { createServer } from "http";
 import cors from "cors";
 import bodyParser from "body-parser";
 import passport from "passport";
+import cookieSession from "cookie-session";
 import { Strategy } from "passport-google-oauth20";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -22,7 +23,13 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(passport.initialize());
-
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["ksdasdo19ioslk"], // Encryption keys for cookies
+    maxAge: 24 * 60 * 60 * 1000, // 1-day session expiration
+  })
+);
 passport.use(
   new Strategy(
     {
@@ -37,6 +44,14 @@ passport.use(
   )
 );
 
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user: any, done) => {
+  done(null, user);
+});
 // app.use("/public", publicRouter);
 // app.use("/admin", adminMiddleware, adminRouter);
 
