@@ -4,9 +4,11 @@ import { sequelize } from "../config/connection";
 interface DocumentAttributes {
   id: number;
   title: string;
+  documentTypeId: number;
   userId: number;
   issuedById: number;
   issuedAt: Date;
+  fileId: string;
 }
 
 interface DocumentCreationAttributes
@@ -31,6 +33,10 @@ const Document = sequelize.define<
       type: DataTypes.INTEGER,
       allowNull: false, // a online user is mandatory for certificate generation for now
     },
+    documentTypeId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     issuedById: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -39,7 +45,10 @@ const Document = sequelize.define<
       type: DataTypes.DATE,
       allowNull: false,
     },
-    
+    fileId: {
+      type: DataTypes.STRING, // file identifier for the document
+      allowNull: false,
+    },
   },
   {
     timestamps: true,
