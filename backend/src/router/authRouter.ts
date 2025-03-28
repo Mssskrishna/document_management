@@ -13,6 +13,8 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
+    //TODO : create user in db if not exists
+    console.log(req);
     const token = jwt.sign({ user: req.user }, process.env.JWT_SECRET!, {
       expiresIn: "1d",
     });

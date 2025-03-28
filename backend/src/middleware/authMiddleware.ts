@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
+import User from "../models/User";
+import Role from "../models/Role";
 
-export const isAuthenticated = (
+export const isAuthenticated = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -19,5 +21,23 @@ export const isAuthenticated = (
   }
 
   req.email = email;
+  let appUser  = await User.findOne({
+    where : {
+      email : email
+    }
+  })
+  let role = await Role.findOne({
+    where : {
+      id : appUser?.dataValues.role
+    }
+  })
+  //TODO : throw unauthenticated if user not found
+  req.appUser = {
+    id: appUser!.dataValues.id,
+    role: {
+      id: role!.dataValues.id,
+      departmentId: role!.dataValues.departmentId,
+    },  
+  }
   next();
 };
