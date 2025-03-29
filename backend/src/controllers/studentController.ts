@@ -10,7 +10,6 @@ export const listDocuments = async (req: Request, res: Response) => {
   try {
     let documents = await Document.findAll({
       where: {
-        //@ts-expect-error thisc
         userId: req.appUser!.id,
       },
     });
@@ -26,7 +25,6 @@ export const listApplications = async (req: Request, res: Response) => {
     status = parseInt(status);
     let applications = await Application.findAll({
       where: {
-        //@ts-expect-error thisc
         userId: req.appUser!.id,
         applicationStatus: status,
       },
@@ -52,7 +50,6 @@ export const applyForDocument = async (req: Request, res: Response) => {
 
     let documentExists = await Document.findOne({
       where: {
-        //@ts-expect-error thisc
         userId: req.appUser!.id,
         documentTypeId: documentTypeId,
       },
@@ -66,7 +63,6 @@ export const applyForDocument = async (req: Request, res: Response) => {
       applicationStatus: ApplicationStatus.PENDING,
       documentTypeId: documentTypeId,
       remarks: remarks,
-      //@ts-expect-error this
       userId: req.appUser!.id,
     });
 

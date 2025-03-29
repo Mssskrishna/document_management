@@ -16,7 +16,6 @@ export const listApplications = async (req: Request, res: Response) => {
           model: DocumentType,
           as: "documentType",
           where: {
-            //@ts-expect-error this
             departmentId: req.appUser!.role.departmentId!,
           },
           required: true,
@@ -43,7 +42,6 @@ export const updateApplication = async (req: Request, res: Response) => {
           model: DocumentType,
           as: "documentType",
           where: {
-            //@ts-expect-error this
             departmentId: req.appUser!.role.departmentId!,
           },
           required: true,

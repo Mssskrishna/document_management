@@ -21,7 +21,7 @@ const sequelize = new Sequelize({
 });
 
 // Make the connection
-async function syncModels(models = path.join(process.cwd(), "src/models")) {
+async function syncModels(models = path.join(process.cwd(), "dist/models")) {
   const db: Map<String, any> = new Map();
 
   fs.readdirSync(models).forEach(async function (fileOrDir) {
