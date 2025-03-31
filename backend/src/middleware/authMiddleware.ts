@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User";
 import Role from "../models/Role";
 import { responseHandler } from "../utils/responseHandler";
+import { error } from "console";
 
 export const isAuthenticated = async (
   req: Request,
@@ -12,9 +13,9 @@ export const isAuthenticated = async (
   try {
     const sessionID =
       req.cookies.sessionID || req.headers.authorization?.split(" ")[1];
-
+    console.log(req.cookies)
     if (!sessionID) {
-      return responseHandler.error(res, "Unauthorized: No token provided");
+      throw "Unauthorized: No token provided";
     }
 
     const decoded = jwt.verify(sessionID, process.env.JWT_SECRET!) as {
@@ -35,7 +36,7 @@ export const isAuthenticated = async (
         id: user.dataValues.role,
       },
     }))!;
-
+    console.log(role)
     req.user = decoded; // Attach user data to request
     req.email = decoded.email;
     req.appUser = {
@@ -47,6 +48,6 @@ export const isAuthenticated = async (
     };
     next();
   } catch (error) {
-    return responseHandler.error(res, "Unauthorized: Invalid token");
+    next(error);
   }
 };

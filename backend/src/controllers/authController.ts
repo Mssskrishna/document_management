@@ -3,21 +3,37 @@ import jwt from "jsonwebtoken";
 import { responseHandler } from "../utils/responseHandler";
 import { authClient } from "../config/oauthClient";
 import User from "../models/User";
+import Role from "../models/Role";
 
 export const getToken = async (req: Request, res: Response) => {
   try {
-    const { cookies } = req;
-    if (!cookies.sessionID) {
-      throw "Unauthorized";
+    const sessionID =
+      req.cookies.sessionID || req.headers.authorization?.split(" ")[1];
+
+    if (!sessionID) {
+      throw "Unauthorized: No token provided";
     }
-    //try chesanu change chey
-    const decoded = jwt.verify(cookies.sessionID, process.env.JWT_SECRET!);
-    responseHandler.success(res, "Logged in", decoded);
+
+    const decoded = jwt.verify(sessionID, process.env.JWT_SECRET!) as {
+      userId: number;
+      email: string;
+    };
+
+    //TODO : check user exists in database
+    let user = await User.findOne({
+      where: {
+        id: decoded.userId,
+      },
+    });
+    if (!user) throw "Unauthorized";
+
+    responseHandler.success(res, "User authenticated", {
+      data: { sessionID },
+    });
   } catch (error) {
     responseHandler.error(res, error);
   }
 };
-
 export const validateCredential = async (req: Request, res: Response) => {
   try {
     const { credential } = req.body;
@@ -44,7 +60,7 @@ export const validateCredential = async (req: Request, res: Response) => {
       //create user
       user = await User.create({
         email,
-        role: 0, // 0 student ,
+        role: 1, // 0 student ,
       });
     }
 
@@ -57,9 +73,11 @@ export const validateCredential = async (req: Request, res: Response) => {
     );
     res.cookie("sessionID", sessionID, {
       httpOnly: true,
-      secure: false, // Set to true in production when using HTTPS
-      maxAge: 24 * 3600000, // 1 hour in milliseconds
+      secure: false, // Change to `true` in production
+      // sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
+
     responseHandler.success(res, "Logged in", {});
   } catch (error) {
     responseHandler.error(res, error);
