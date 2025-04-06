@@ -1,4 +1,5 @@
 import Application from "../models/Application";
+import Attachment from "../models/Attachment";
 import DocumentType from "../models/DocumentType";
 import User from "../models/User";
 
@@ -25,5 +26,15 @@ export const performAssociations = () => {
   Application.belongsTo(User, {
     foreignKey: "userId",
     as: "user", // optional alias
+  });
+
+  Application.hasMany(Attachment, {
+    foreignKey: "applicationId",
+    as: "attachment",
+  });
+
+  Attachment.belongsTo(Application, {
+    foreignKey: "applicationId",
+    as: "attachment",
   });
 };

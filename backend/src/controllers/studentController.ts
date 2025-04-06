@@ -30,6 +30,13 @@ export const listApplications = async (req: Request, res: Response) => {
         userId: req.appUser!.id,
         applicationStatus: status,
       },
+      include: [
+        {
+          model: Attachment,
+          attributes: ["id", "name"],
+          as: "attachment",
+        },
+      ],
     });
     responseHandler.success(res, "Fetched", applications);
   } catch (error) {

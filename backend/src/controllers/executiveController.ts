@@ -6,6 +6,7 @@ import { ApplicationStatus } from "../enums/ApplicationStatus";
 import User from "../models/User";
 import { generateAndSavePDF } from "../utils/pdfGenerator";
 import Document from "../models/Document";
+import Attachment from "../models/Attachment";
 
 export const listApplications = async (req: Request, res: Response) => {
   try {
@@ -26,6 +27,11 @@ export const listApplications = async (req: Request, res: Response) => {
         {
           model: User,
           as: "user",
+        },
+        {
+          model: Attachment,
+          attributes: ["id", "name"],
+          as: "attachment",
         },
       ],
     });
