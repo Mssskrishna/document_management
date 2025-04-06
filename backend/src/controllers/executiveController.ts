@@ -21,6 +21,10 @@ export const listApplications = async (req: Request, res: Response) => {
           },
           required: true,
         },
+        {
+          model: User,
+          as: "user",
+        },
       ],
     });
 
@@ -98,5 +102,3 @@ export const updateApplication = async (req: Request, res: Response) => {
     responseHandler.error(res, error);
   }
 };
-
-

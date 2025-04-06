@@ -73,7 +73,7 @@ export const validateCredential = async (req: Request, res: Response) => {
     res.cookie("sessionID", sessionID, {
       httpOnly: true,
       secure: false, // Change to `true` in production
-      // sameSite: "strict",
+      sameSite: "strict",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
