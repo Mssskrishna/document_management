@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import server from "./config/server";
 import { makeConnection } from "./config/connection";
 import { init } from "./database/init";
+import { generateAndSavePDF } from "./utils/pdfGenerator";
 
 dotenv.config();
 const port = 8080;

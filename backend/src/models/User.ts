@@ -3,6 +3,7 @@ import { sequelize } from "../config/connection";
 
 interface UserAttributes {
   id: number;
+  name: string;
   email: string;
   role: number;
 }
@@ -20,6 +21,10 @@ const User = sequelize.define<Model<UserAttributes, UserCreationAttributes>>(
     },
     role: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     email: {

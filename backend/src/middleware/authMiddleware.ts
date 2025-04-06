@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 import Role from "../models/Role";
-import { responseHandler } from "../utils/responseHandler";
-import { error } from "console";
 
 export const isAuthenticated = async (
   req: Request,
@@ -44,7 +42,7 @@ export const isAuthenticated = async (
         id: user.dataValues.role,
         departmentId: role.dataValues.departmentId,
       },
-    };
+    };  
     next();
   } catch (error) {
     next(error);

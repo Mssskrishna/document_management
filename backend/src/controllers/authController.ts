@@ -45,7 +45,7 @@ export const validateCredential = async (req: Request, res: Response) => {
     if (!payload) {
       throw "Unauthorized";
     }
-    const { email } = payload!;
+    const { email, name } = payload!;
     if (!email) {
       throw "Unauthorized";
     }
@@ -60,6 +60,7 @@ export const validateCredential = async (req: Request, res: Response) => {
       user = await User.create({
         email,
         role: 1, // 0 student ,
+        name: name ?? "kviqw9023",
       });
     }
 

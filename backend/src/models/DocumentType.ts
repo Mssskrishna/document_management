@@ -1,17 +1,18 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/connection";
 
-interface DocumentTypeAttributes {
+export interface DocumentTypeAttributes {
   id: number;
   title: string;
   canGenerateDigitally: boolean;
   canGeneratePhysically: boolean;
   preRequiredTypes?: string; //array of document type ids that are necessary for requesting document
+  templateName: string;
   multipleAllowed: boolean;
   departmentId: number;
 }
 
-interface DocumentTypeCreationAttributes
+export interface DocumentTypeCreationAttributes
   extends Optional<DocumentTypeAttributes, "id"> {}
 
 const DocumentType = sequelize.define<
@@ -28,6 +29,11 @@ const DocumentType = sequelize.define<
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    templateName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
     },
     canGenerateDigitally: {
       type: DataTypes.BOOLEAN,

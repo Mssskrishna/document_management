@@ -35,6 +35,7 @@ const seedDatabase = async () => {
           canGeneratePhysically: true,
           multipleAllowed: false,
           departmentId: departmentMap["Dean Student Welfare"],
+          templateName: "id-card",
         },
         {
           title: "Bonafide Certificate",
@@ -42,13 +43,15 @@ const seedDatabase = async () => {
           canGeneratePhysically: true,
           multipleAllowed: true,
           departmentId: departmentMap["Computer Science"],
+          templateName: "bonafide",
         },
         {
-          title: "Library Card",
+          title: "Library Due Clearance",
           canGenerateDigitally: false,
           canGeneratePhysically: true,
           multipleAllowed: false,
           departmentId: departmentMap["Library"],
+          templateName: "library-clearance",
         },
       ],
       { ignoreDuplicates: true }

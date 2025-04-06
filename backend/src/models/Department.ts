@@ -27,7 +27,7 @@ const Department = sequelize.define<
   },
   {
     timestamps: true,
-    tableName: "deparment",
+    tableName: "department",
   }
 );
 
