@@ -49,7 +49,7 @@ async function makeConnection() {
   try {
     await syncModels();
     await sequelize.authenticate();
-    await sequelize.sync({ alter: false, force: false });
+    await sequelize.sync({ alter: true, force: false });
     console.log("Connection has been established successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);

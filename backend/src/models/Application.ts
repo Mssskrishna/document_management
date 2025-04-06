@@ -6,9 +6,10 @@ interface ApplicationAttributes {
   userId: number;
   documentTypeId: number;
   applicationStatus: number;
-  issuedDocumentId?: number;
-  arpprovedBy?: number;
-  remarks: string;
+  issuedDocumentId: number | null ;
+  arpprovedBy: number | null;
+  coverLetter: string | null ;
+  remarks: string | null;
 }
 
 interface ApplicationCreationAttributes
@@ -45,9 +46,13 @@ const Application = sequelize.define<
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    coverLetter: {
+      type: DataTypes.STRING(1000),
+      allowNull: true,
+    },
     remarks: {
       type: DataTypes.STRING(1000),
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

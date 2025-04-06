@@ -2,6 +2,7 @@ import puppeteer from "puppeteer";
 import fs from "fs-extra";
 import path from "path";
 import { randomUUID } from "crypto";
+import { setCacheData } from "../config/redis";
 
 /**
  * Replace placeholders like {{key}} in the HTML with actual values
@@ -53,4 +54,13 @@ export async function generateAndSavePDF(
     console.error("❌ Failed to generate PDF:", error);
     return null;
   }
+}
+
+//returns one time file access token
+export async function generateOTAToken(fileName: string): Promise<string> {
+  const token = randomUUID();
+  const filePath = path.join(__dirname, "..", "..", "src/assets", fileName);
+
+  await setCacheData(`download-token:${token}`, filePath, 300); //valid for 5 mins
+  return token;
 }

@@ -11,7 +11,7 @@ export const isAuthenticated = async (
   try {
     const sessionID =
       req.cookies.sessionID || req.headers.authorization?.split(" ")[1];
-    console.log(req.cookies)
+    console.log(req.cookies);
     if (!sessionID) {
       throw "Unauthorized: No token provided";
     }
@@ -42,7 +42,7 @@ export const isAuthenticated = async (
         id: user.dataValues.role,
         departmentId: role.dataValues.departmentId,
       },
-    };  
+    };
     next();
   } catch (error) {
     next(error);

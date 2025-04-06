@@ -4,6 +4,8 @@ import Document from "../models/Document";
 import Application from "../models/Application";
 import DocumentType from "../models/DocumentType";
 import { ApplicationStatus } from "../enums/ApplicationStatus";
+import Attachment from "../models/Attachment";
+import { Op } from "sequelize";
 
 //TODO : Middleware to allow only students
 export const listDocuments = async (req: Request, res: Response) => {
@@ -37,7 +39,26 @@ export const listApplications = async (req: Request, res: Response) => {
 
 export const applyForDocument = async (req: Request, res: Response) => {
   try {
-    let { documentTypeId, remarks } = req.body;
+    let { documentTypeId, coverLetter, attachmentIds } = req.body;
+
+    if (!Array.isArray(attachmentIds)) {
+      throw "attachmentIds must be an array";
+    }
+
+    let parsedAttachmentIds: number[] = [];
+    for (let i = 0; i < attachmentIds.length; i++) {
+      let exists = await Attachment.findOne({
+        where: {
+          id: attachmentIds[i],
+        },
+      });
+
+      if (!exists) {
+        throw "Invalid attachment id provided";
+      }
+
+      parsedAttachmentIds.push(attachmentIds[i]);
+    }
 
     let documentType = await DocumentType.findOne({
       where: {
@@ -59,12 +80,26 @@ export const applyForDocument = async (req: Request, res: Response) => {
       throw "Document already exists for user";
     }
 
-    await Application.create({
+    let application = await Application.create({
       applicationStatus: ApplicationStatus.PENDING,
       documentTypeId: documentTypeId,
-      remarks: remarks,
+      coverLetter: coverLetter,
       userId: req.appUser!.id,
     });
+
+    if (parsedAttachmentIds.length > 0)
+      await Attachment.update(
+        {
+          applicationId: application.dataValues.id,
+        },
+        {
+          where: {
+            id: {
+              [Op.in]: parsedAttachmentIds,
+            },
+          },
+        }
+      );
 
     responseHandler.success(res, "Application submitted");
   } catch (error) {

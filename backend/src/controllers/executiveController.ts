@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import { responseHandler } from "../utils/responseHandler";
 import Application from "../models/Application";
-import DocumentType, {
-  DocumentTypeAttributes,
-  DocumentTypeCreationAttributes,
-} from "../models/DocumentType";
+import DocumentType from "../models/DocumentType";
 import { ApplicationStatus } from "../enums/ApplicationStatus";
 import User from "../models/User";
 import { generateAndSavePDF } from "../utils/pdfGenerator";
@@ -63,7 +60,7 @@ export const updateRole = async (req: Request, res: Response) => {
 
 export const updateApplication = async (req: Request, res: Response) => {
   try {
-    const { id, status } = req.body;
+    const { id, status, remarks } = req.body;
 
     let application = await Application.findOne({
       where: {
@@ -98,35 +95,42 @@ export const updateApplication = async (req: Request, res: Response) => {
       throw "Invalid Status";
     }
 
-    let documentType = (await DocumentType.findOne({
-      where: {
-        id: application.dataValues.documentTypeId,
-      },
-    }))!;
+    let generatedDocumentId = null;
+    if (status === ApplicationStatus.APPROVED) {
+      let documentType = (await DocumentType.findOne({
+        where: {
+          id: application.dataValues.documentTypeId,
+        },
+      }))!;
 
-    //TODO : pass application data for pdf creation
-    let generatedFileId = await generateAndSavePDF(
-      documentType.dataValues.templateName + '.html',
-      {}
-    );
+      //TODO : pass application data for pdf creation
+      let generatedFileId = await generateAndSavePDF(
+        documentType.dataValues.templateName + ".html",
+        {}
+      );
 
-    if (!generatedFileId) {
-      throw "Failed to generated document";
+      if (!generatedFileId) {
+        throw "Failed to generated document";
+      }
+
+      let document = await Document.create({
+        fileId: generatedFileId,
+        documentTypeId: documentType.dataValues.id,
+        issuedAt: new Date(),
+        issuedById: req.appUser!.id,
+        title: "", //todo check if this is required
+        userId: application.dataValues.userId,
+      });
+
+      generatedDocumentId = document.dataValues.id;
     }
 
-    let document = await Document.create({
-      fileId: generatedFileId,
-      documentTypeId: documentType.dataValues.id,
-      issuedAt: new Date(),
-      issuedById: req.appUser!.id,
-      title: "", //todo check if this is required
-      userId: application.dataValues.userId,
-    });
     //generate document and update application status
     //TODO : generate a document
     await application.update({
       applicationStatus: status,
-      issuedDocumentId: document.dataValues.id,
+      issuedDocumentId: generatedDocumentId,
+      remarks: remarks,
       arpprovedBy: req.appUser!.id,
     });
     responseHandler.success(res, "Application Updtated");

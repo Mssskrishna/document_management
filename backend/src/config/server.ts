@@ -9,9 +9,13 @@ import authRouter from "../router/authRouter";
 import executiveRouter from "../router/executiveRouter";
 import { isAuthenticated } from "../middleware/authMiddleware";
 import cookieParser from "cookie-parser";
+
 dotenv.config();
 // import publicRouter from "../router/publicRouter";
 const app = express();
+
+
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 const corsOptions = {
@@ -38,6 +42,7 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/student", isAuthenticated, studentRouter);
 app.use("/executive", isAuthenticated, executiveRouter);
+
 
 const server = createServer(app);
 export { app };

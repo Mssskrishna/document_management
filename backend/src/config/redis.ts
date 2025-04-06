@@ -5,7 +5,7 @@ dotenv.config();
 
 const redisClient = createClient({
   url: process.env.REDIS_URL || "redis://localhost:6379",
-  database: 9,
+  database: 5,
 });
 
 redisClient.on("error", (err) => console.log("Redis Client Error", err));
@@ -33,6 +33,10 @@ export const getCacheData = async (key: string) => {
   let data = await redisClient.get(key);
   let result = data ? JSON.parse(data) : null;
   return result ? result.data : null;
+};
+
+export const clearCacheKey = async (key: string) => {
+  await redisClient.del(key);
 };
 
 export const setCacheDataWithoutExpiration = async (
