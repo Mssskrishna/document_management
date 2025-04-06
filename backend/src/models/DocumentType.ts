@@ -8,6 +8,7 @@ interface DocumentTypeAttributes {
   canGeneratePhysically: boolean;
   preRequiredTypes?: string; //array of document type ids that are necessary for requesting document
   multipleAllowed: boolean;
+  departmentId: number;
 }
 
 interface DocumentTypeCreationAttributes
@@ -48,6 +49,11 @@ const DocumentType = sequelize.define<
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    //temporary use of department id for accesssibility
+    departmentId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   },
   {

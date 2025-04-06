@@ -7,5 +7,5 @@ executiveRouter.post(
   "/update-application",
   executiveController.updateApplication
 );
-
+executiveRouter.post("/updaterole", executiveController.updateRole);
 export default executiveRouter;

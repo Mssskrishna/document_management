@@ -34,18 +34,21 @@ const seedDatabase = async () => {
           canGenerateDigitally: true,
           canGeneratePhysically: true,
           multipleAllowed: false,
+          departmentId: departmentMap["Dean Student Welfare"],
         },
         {
           title: "Bonafide Certificate",
           canGenerateDigitally: true,
           canGeneratePhysically: true,
           multipleAllowed: true,
+          departmentId: departmentMap["Computer Science"],
         },
         {
           title: "Library Card",
           canGenerateDigitally: false,
           canGeneratePhysically: true,
           multipleAllowed: false,
+          departmentId: departmentMap["Library"],
         },
       ],
       { ignoreDuplicates: true }
