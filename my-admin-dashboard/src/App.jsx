@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import GoogleAuth from "./Google";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useAuth } from "./AuthContext";
 import axios from "axios";
 const requestsData = [

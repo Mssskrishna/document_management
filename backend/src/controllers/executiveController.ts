@@ -3,6 +3,7 @@ import { responseHandler } from "../utils/responseHandler";
 import Application from "../models/Application";
 import DocumentType from "../models/DocumentType";
 import { ApplicationStatus } from "../enums/ApplicationStatus";
+import User from "../models/User";
 
 export const listApplications = async (req: Request, res: Response) => {
   try {
@@ -24,6 +25,28 @@ export const listApplications = async (req: Request, res: Response) => {
     });
 
     responseHandler.success(res, "Fetched", applications);
+  } catch (error) {
+    responseHandler.error(res, error);
+  }
+};
+export const updateRole = async (req: Request, res: Response) => {
+  try {
+    const { userEmail, role } = req.body;
+    const user = await User.findOne({
+      where: {
+        email: userEmail,
+      },
+    });
+    if (!user) throw "User not found";
+    const roleUpdate = await User.update(
+      { role: role },
+      {
+        where: {
+          id: user.dataValues.id,
+        },
+      }
+    );
+    if (!roleUpdate) throw "Role not updated";
   } catch (error) {
     responseHandler.error(res, error);
   }

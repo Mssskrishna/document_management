@@ -36,7 +36,6 @@ export const isAuthenticated = async (
         id: user.dataValues.role,
       },
     }))!;
-    console.log(role)
     req.user = decoded; // Attach user data to request
     req.email = decoded.email;
     req.appUser = {

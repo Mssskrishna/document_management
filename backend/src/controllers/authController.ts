@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import { responseHandler } from "../utils/responseHandler";
 import { authClient } from "../config/oauthClient";
 import User from "../models/User";
-import Role from "../models/Role";
 
 export const getToken = async (req: Request, res: Response) => {
   try {
