@@ -9,6 +9,7 @@ import authRouter from "../router/authRouter";
 import executiveRouter from "../router/executiveRouter";
 import { isAuthenticated } from "../middleware/authMiddleware";
 import cookieParser from "cookie-parser";
+import filesRouter from "../router/filesRouter";
 
 dotenv.config();
 // import publicRouter from "../router/publicRouter";
@@ -42,7 +43,7 @@ app.use(
 app.use("/auth", authRouter);
 app.use("/student", isAuthenticated, studentRouter);
 app.use("/executive", isAuthenticated, executiveRouter);
-
+app.use("/file", filesRouter);
 
 const server = createServer(app);
 export { app };

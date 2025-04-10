@@ -1,0 +1,6 @@
+install redis 
+
+sudo apt install redis-server
+
+puppetter chromium installation for pdf creation
+node node_modules/puppeteer/install.mjs 
