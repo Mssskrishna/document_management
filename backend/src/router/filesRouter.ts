@@ -6,6 +6,11 @@ import { isAuthenticated } from "../middleware/authMiddleware";
 const filesRouter = Router();
 
 //any user can perform download , having valid token
+filesRouter.post(
+  "/initiate-download",
+  isAuthenticated,
+  filesController.initiateDownload
+);
 filesRouter.get("/download/:token", filesController.downloadFile);
 filesRouter.post(
   "/upload",
