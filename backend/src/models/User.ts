@@ -5,7 +5,7 @@ interface UserAttributes {
   id: number;
   name: string;
   email: string;
-  role: number;
+  role: number | null;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
@@ -21,7 +21,7 @@ const User = sequelize.define<Model<UserAttributes, UserCreationAttributes>>(
     },
     role: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true, //role null -> student
     },
     name: {
       type: DataTypes.STRING,

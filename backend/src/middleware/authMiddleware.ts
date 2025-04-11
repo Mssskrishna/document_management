@@ -29,20 +29,27 @@ export const isAuthenticated = async (
     });
     if (!user) throw "Unauthorized";
 
-    let role = (await Role.findOne({
-      where: {
-        id: user.dataValues.role,
-      },
-    }))!;
     req.user = decoded; // Attach user data to request
     req.email = decoded.email;
     req.appUser = {
       id: user.dataValues.id,
-      role: {
-        id: user.dataValues.role,
-        departmentId: role.dataValues.departmentId,
-      },
+      role: null,
     };
+
+    if (user.dataValues.role) {
+      let role = (await Role.findOne({
+        where: {
+          id: user.dataValues.role,
+        },
+      }))!;
+
+      req.appUser.role = user.dataValues.role
+        ? {
+            id: user.dataValues.role,
+            departmentId: role.dataValues.departmentId,
+          }
+        : null;
+    }
     next();
   } catch (error) {
     next(error);

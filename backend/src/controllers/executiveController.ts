@@ -7,20 +7,24 @@ import User from "../models/User";
 import { generateAndSavePDF } from "../utils/pdfGenerator";
 import Document from "../models/Document";
 import Attachment from "../models/Attachment";
+import { Op } from "sequelize";
 
 export const listApplications = async (req: Request, res: Response) => {
   try {
-    let { status = ApplicationStatus.PENDING } = req.body;
+    let { status = [ApplicationStatus.PENDING] } = req.body;
+    
     let applications = await Application.findAll({
       where: {
-        applicationStatus: status,
+        applicationStatus: {
+          [Op.in]: status,
+        },
       },
       include: [
         {
           model: DocumentType,
           as: "documentType",
           where: {
-            departmentId: req.appUser!.role.departmentId!,
+            departmentId: req.appUser!.role!.departmentId!,
           },
           required: true,
         },
@@ -77,7 +81,7 @@ export const updateApplication = async (req: Request, res: Response) => {
           model: DocumentType,
           as: "documentType",
           where: {
-            departmentId: req.appUser!.role.departmentId!,
+            departmentId: req.appUser!.role!.departmentId!,
           },
           required: true,
         },

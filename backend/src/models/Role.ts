@@ -4,7 +4,7 @@ import { sequelize } from "../config/connection";
 interface RoleAttributes {
   id: number;
   title: string;
-  departmentId: number;
+departmentId: number;
   allowMultiple: boolean;
 }
 

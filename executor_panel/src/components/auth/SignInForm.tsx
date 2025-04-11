@@ -1,23 +1,37 @@
-// import React from "react";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import { BaseUrl } from "../../utils/baseurl";
+import { baseUrl } from "../../utils/constants";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setLoggedIn, setUser } from "../../features/user/userSlice";
 
 const SignInForm = () => {
-  const { authCheck } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const clientId =
     "712348172997-2nidak9kred0qfu7daifnknm1o973jms.apps.googleusercontent.com";
 
-  const handleSuccess = async (credentialResponse: any) => {
-    console.log("Google Login Success:", credentialResponse);
+  const performLogout = async () => {
+    try {
+      const res = await fetch(`${baseUrl}/auth/logout`, {
+        credentials: "include",
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const handleSuccess = async (credentialResponse: any) => {
     if (credentialResponse.credential) {
       try {
         const response = await axios.post(
-          `${BaseUrl}/auth/login`,
+          `${baseUrl}/auth/login`,
           { credential: credentialResponse.credential },
           {
             headers: { "Content-Type": "application/json" },
@@ -25,34 +39,58 @@ const SignInForm = () => {
           }
         );
 
-        console.log(response.data);
+        const data = response.data;
+        const user = data.body.data;
+
+        if (!user.hasExecutorAccess) {
+          toast.error(
+            "Unable to login into panel , please try with different email"
+          );
+          performLogout();
+          dispatch(setLoggedIn(false));
+          return;
+        }
+        dispatch(setUser(user));
+        dispatch(setLoggedIn(true));
 
         if (response.status === 200) {
-          await authCheck();
-          console.log("Auth check");
-          navigate("/dashboard");
-          console.log("Login Success:", response.data);
+          navigate("/");
         } else {
-          console.error("Login Failed:", response.data);
+          throw "Login Failed";
         }
       } catch (error: any) {
+        dispatch(setLoggedIn(false));
         console.error(
           "Error:",
           error.response ? error.response.data : error.message
         );
+        toast.error(error.response ? error.response.data : error.message);
       }
     }
   };
 
   return (
-    <GoogleOAuthProvider clientId={clientId}>
-      <GoogleLogin
-        onSuccess={handleSuccess}
-        onError={() => {
-          console.log("Google Login Failed");
-        }}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-gray-800 px-4">
+      {/* Logo */}
+      <img
+        src="/favicon.png" // Replace with your logo path
+        alt="Logo"
+        className="h-20 mb-6"
       />
-    </GoogleOAuthProvider>
+
+      {/* Title */}
+      <h1 className="text-3xl font-semibold mb-10 text-center">
+        Document Platform Executive Panel
+      </h1>
+
+      {/* Google Login */}
+      <GoogleOAuthProvider clientId={clientId}>
+        <GoogleLogin
+          onSuccess={handleSuccess}
+          onError={() => console.log("Google Login Failed")}
+        />
+      </GoogleOAuthProvider>
+    </div>
   );
 };
 

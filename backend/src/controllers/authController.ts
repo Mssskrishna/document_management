@@ -4,7 +4,8 @@ import { responseHandler } from "../utils/responseHandler";
 import { authClient } from "../config/oauthClient";
 import User from "../models/User";
 
-export const getToken = async (req: Request, res: Response) => {
+//role
+export const verifyLogin = async (req: Request, res: Response) => {
   try {
     const sessionID =
       req.cookies.sessionID || req.headers.authorization?.split(" ")[1];
@@ -27,7 +28,12 @@ export const getToken = async (req: Request, res: Response) => {
     if (!user) throw "Unauthorized";
 
     responseHandler.success(res, "User authenticated", {
-      data: { sessionID },
+      data: {
+        role: user.dataValues.role,
+        email: user.dataValues.email,
+        name: user.dataValues.name,
+        hasExecutorAccess: user.dataValues.role !== null,
+      },
     });
   } catch (error) {
     responseHandler.error(res, error);
@@ -59,7 +65,7 @@ export const validateCredential = async (req: Request, res: Response) => {
       //create user
       user = await User.create({
         email,
-        role: 1, // 0 student ,
+        role: null, // null student ,
         name: name ?? "kviqw9023",
       });
     }
@@ -78,7 +84,27 @@ export const validateCredential = async (req: Request, res: Response) => {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
-    responseHandler.success(res, "Logged in", {});
+    responseHandler.success(res, "Logged in", {
+      data: {
+        role: user.dataValues.role,
+        email: user.dataValues.email,
+        name: user.dataValues.name,
+        hasExecutorAccess: user.dataValues.role !== null,
+      },
+    });
+  } catch (error) {
+    responseHandler.error(res, error);
+  }
+};
+
+export const logout = (req: Request, res: Response) => {
+  try {
+    res.clearCookie("sessionID", {
+      httpOnly: true,
+      secure: false, // true in production
+      sameSite: "strict",
+    });
+    responseHandler.success(res, "Logged out successfully", {});
   } catch (error) {
     responseHandler.error(res, error);
   }

@@ -3,5 +3,6 @@ import * as authController from "../controllers/authController";
 
 const authRouter = Router();
 authRouter.post("/login", authController.validateCredential);
-authRouter.get("/check", authController.getToken);
+authRouter.post("/logout", authController.logout);
+authRouter.get("/verify-login", authController.verifyLogin);
 export default authRouter;

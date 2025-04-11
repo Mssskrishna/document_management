@@ -45,6 +45,7 @@ export const initiateDownload = async (req: Request, res: Response) => {
           },
         }))!;
         if (
+          req.appUser!.role &&
           documentType.dataValues.departmentId != req.appUser!.role.departmentId
         ) {
           throw "UnAuthroized";
@@ -71,6 +72,7 @@ export const initiateDownload = async (req: Request, res: Response) => {
           },
         }))!;
         if (
+          req.appUser!.role &&
           documentType.dataValues.departmentId != req.appUser!.role.departmentId
         ) {
           throw "UnAuthroized";

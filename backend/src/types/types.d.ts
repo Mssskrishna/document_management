@@ -6,7 +6,7 @@ declare namespace Express {
       role: {
         id: number;
         departmentId?: number;
-      };
+      } | null;
     };
   }
 }

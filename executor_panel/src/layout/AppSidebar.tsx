@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 // Assume these icons are imported from an icon library
 import {
@@ -11,6 +11,9 @@ import {
   UserCircleIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
+import { LogOut } from "lucide-react";
+import { baseUrl } from "../utils/constants";
+import toast from "react-hot-toast";
 
 type NavItem = {
   name: string;
@@ -26,18 +29,14 @@ const navItems: NavItem[] = [
     path: "/",
   },
   {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
-  },
-  {
     name: "Applications",
     icon: <ListIcon />,
-    subItems: [
-      { name: "Pending", path: "/pending", pro: false },
-      { name: "Approved", path: "/approved", pro: false },
-      { name: "Rejected", path: "/rejected", pro: false },
-    ],
+    // subItems: [
+    //   { name: "Pending", path: "/pending", pro: false },
+    //   { name: "Approved", path: "/approved", pro: false },
+    //   { name: "Rejected", path: "/rejected", pro: false },
+    // ],
+    path: "/applications",
   },
   {
     icon: <UserCircleIcon />,
@@ -46,10 +45,10 @@ const navItems: NavItem[] = [
   },
 ];
 
-
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
@@ -65,6 +64,24 @@ const AppSidebar: React.FC = () => {
     (path: string) => location.pathname === path,
     [location.pathname]
   );
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch(`${baseUrl}/auth/logout`, {
+        credentials: "include",
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      toast("Signed out");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
 
   useEffect(() => {
     let submenuMatched = false;
@@ -234,6 +251,19 @@ const AppSidebar: React.FC = () => {
           )}
         </li>
       ))}
+      <div className="menu-item group cursor-pointer">
+        <li className="flex gap-3" onClick={handleLogout}>
+          <span
+            className={`menu-item-icon-size menu-item-icon-inactive
+          }`}
+          >
+            <LogOut />
+          </span>
+          {(isExpanded || isHovered || isMobileOpen) && (
+            <span className="menu-item-text">Logout</span>
+          )}
+        </li>
+      </div>
     </ul>
   );
 
@@ -304,7 +334,6 @@ const AppSidebar: React.FC = () => {
               </h2>
               {renderMenuItems(navItems, "main")}
             </div>
-            
           </div>
         </nav>
         {/* {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null} */}
