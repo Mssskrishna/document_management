@@ -11,7 +11,6 @@ export const isAuthenticated = async (
   try {
     const sessionID =
       req.cookies.sessionID || req.headers.authorization?.split(" ")[1];
-    console.log(req.cookies);
     if (!sessionID) {
       throw "Unauthorized: No token provided";
     }

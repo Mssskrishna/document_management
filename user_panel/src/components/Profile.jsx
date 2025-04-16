@@ -1,8 +1,10 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import { useAuth } from "../AuthContext";
+import { toast } from "react-toastify";
 const Profile = () => {
   // Sample student details (can be replaced with actual API data)
-  const student = {
+  // const { user } = useAuth();
+  const user = {
     photo: "https://intranet.rguktn.ac.in/SMS/usrphotos/user/N200997.jpg", // Replace with actual photo URL
     name: "Bhavani Kishore",
     id: "N200997",
@@ -20,30 +22,35 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-700 flex items-center justify-center p-6">
       <div>
-      <h2 className="text-xl font-semibold text-white flex flex-row items-center justify-center ">Student Details</h2>
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl">
+        <h2 className="text-xl font-semibold text-white flex flex-row items-center justify-center ">
+          Student Details
+        </h2>
+        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl">
+          {/* Profile Photo */}
+          <div className="flex flex-col items-center">
+            <img
+              src={user?.photo}
+              alt="Student"
+              className="w-32 h-32 rounded-full border-4 border-blue-500"
+            />
+            <h1 className="text-2xl font-bold mt-4">{user?.name}</h1>
+            <p className="text-gray-600">
+              {user?.department} - {user?.year}
+            </p>
+          </div>
 
-        {/* Profile Photo */}
-        <div className="flex flex-col items-center">
-          <img src={student.photo} alt="Student" className="w-32 h-32 rounded-full border-4 border-blue-500" />
-          <h1 className="text-2xl font-bold mt-4">{student.name}</h1>
-          <p className="text-gray-600">{student.department} - {student.year}</p>
-        </div>
+          {/* Student Details */}
+          <div className="mt-6">
+            <div className="grid grid-cols-2 gap-4 mt-3">
+              <Info label="Student ID" value={user?.id} />
 
-        {/* Student Details */}
-        <div className="mt-6">
-          <div className="grid grid-cols-2 gap-4 mt-3">
-            <Info label="Student ID" value={student.id} />
-            <Info label="Email" value={student.email} />
-            <Info label="Date of Birth" value={student.dob} />
-            <Info label="Caste" value={student.caste} />
-            <Info label="Phone Number" value={student.phone} />
-            <Info label="Address" value={student.address} />
-            <Info label="Father's Name" value={student.fatherName} />
-            <Info label="Mother's Name" value={student.motherName} />
+              <Info label="Name" value={user?.name} />
+              <Info label="Email" value={user?.email} />
+              <Info label="Date of Birth" value={user?.dob} />
+              <Info label="Phone" value={user?.phone} />
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );

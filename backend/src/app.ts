@@ -14,6 +14,5 @@ server.listen(port, () => {
     "Connected to database";
     init();
     redisConnect();
-    generateAndSavePDF('id-card.html' , {})
   });
 });

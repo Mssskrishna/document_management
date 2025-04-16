@@ -49,7 +49,7 @@ export async function generateAndSavePDF(
     });
 
     await browser.close();
-    return filePath;
+    return fileName;
   } catch (error) {
     console.error("❌ Failed to generate PDF:", error);
     return null;
@@ -60,7 +60,7 @@ export async function generateAndSavePDF(
 export async function generateOTAToken(fileName: string): Promise<string> {
   const token = randomUUID();
   const filePath = path.join(__dirname, "..", "..", "src/assets", fileName);
-
+  console.log(filePath , fileName)
   await setCacheData(`download-token:${token}`, filePath, 300); //valid for 5 mins
   return token;
 }

@@ -3,7 +3,8 @@ import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useAuth } from "../AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { toast } from "react-toastify";
+import { BaseUrl } from "../utils/baseUrl";
 const Auth = () => {
   const { authCheck } = useAuth();
   const navigate = useNavigate();
@@ -12,11 +13,11 @@ const Auth = () => {
 
   const handleSuccess = async (credentialResponse) => {
     console.log("Google Login Success:", credentialResponse);
-
+    
     if (credentialResponse.credential) {
       try {
         const response = await axios.post(
-          "http://localhost:8080/auth/login",
+          `${BaseUrl}/auth/login`,
           { credential: credentialResponse.credential },
           {
             headers: { "Content-Type": "application/json" },
@@ -31,6 +32,10 @@ const Auth = () => {
           console.log("Auth check");
           navigate("/");
           console.log("Login Success:", response.data);
+          toast.success(
+            "Google Login Success , you can request your certificate now"
+          );
+      
         } else {
           console.error("Login Failed:", response.data);
         }
