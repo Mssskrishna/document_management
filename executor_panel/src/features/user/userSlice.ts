@@ -4,6 +4,8 @@ interface User {
   role: number | null;
   name: string;
   email: string;
+  imageUrl: string;
+  roleName: string;
   hasExecutorAccess: boolean;
 }
 
@@ -17,7 +19,9 @@ const initialState: AuthState = {
     role: null,
     name: "",
     email: "",
+    imageUrl: "",
     hasExecutorAccess: false,
+    roleName: "",
   },
   loggedIn: false,
 };

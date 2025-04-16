@@ -21,7 +21,7 @@ const ProtectedPage: React.FC<ProtectedPageProps> = ({ children }) => {
       if (!data.success) {
         throw new Error(data.message);
       }
-      const user = data.body;
+      const user = data.body.data;
       dispatch(setUser(user));
     } catch (error) {
       console.log(error);

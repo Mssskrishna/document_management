@@ -260,7 +260,7 @@ const AppSidebar: React.FC = () => {
             <LogOut />
           </span>
           {(isExpanded || isHovered || isMobileOpen) && (
-            <span className="menu-item-text">Logout</span>
+            <span className="menu-item-text text-white">Logout</span>
           )}
         </li>
       </div>
@@ -290,20 +290,23 @@ const AppSidebar: React.FC = () => {
         <Link to="/">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
-              <img
-                className="dark:hidden"
-                src="/images/logo/logo.svg"
-                alt="Logo"
-                width={150}
-                height={40}
-              />
-              <img
-                className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
-                alt="Logo"
-                width={150}
-                height={40}
-              />
+              <div
+                className="flex justify-center items-center gap-2"
+              >
+                <img
+                  className="dark:hidden"
+                  src="/images/logo/logo-icon.svg"
+                  alt="Logo"
+                  width={40}
+                />
+                <img
+                  className="hidden dark:block"
+                  src="/images/logo/logo-icon.svg"
+                  alt="Logo"
+                  // height={40}
+                />{" "}
+                <span className="text-white menu-item-text">Dashboard</span>
+              </div>
             </>
           ) : (
             <img
