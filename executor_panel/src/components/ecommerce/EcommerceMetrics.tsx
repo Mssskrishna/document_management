@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -5,8 +6,29 @@ import {
   GroupIcon,
 } from "../../icons";
 import Badge from "../ui/badge/Badge";
+import { baseUrl } from "../../utils/constants";
 
 export default function EcommerceMetrics() {
+  const [stats, setStats] = useState({
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+  });
+
+  const init = async () => {
+    try {
+      const res = await fetch(baseUrl + "/executive/stats", {
+        credentials: "include",
+      });
+      const data = await res.json();
+      setStats(data.body.stats);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
       {/* <!-- Metric Item Start --> */}
@@ -21,13 +43,10 @@ export default function EcommerceMetrics() {
               Pending Applications
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              10
+              {stats.pending}
             </h4>
           </div>
-          <Badge color="success">
-            <ArrowUpIcon />
-            11.01%
-          </Badge>
+         
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -43,14 +62,11 @@ export default function EcommerceMetrics() {
               Approved Applications
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              5,359
+              {stats.approved}
             </h4>
           </div>
 
-          <Badge color="error">
-            <ArrowDownIcon />
-            9.05%
-          </Badge>
+         
         </div>
       </div>
       {/* <!-- Metric Item End --> */}
@@ -64,14 +80,14 @@ export default function EcommerceMetrics() {
               Rejected Applications
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              5,359
+              {stats.rejected}
             </h4>
           </div>
 
-          <Badge color="error">
+          {/* <Badge color="error">
             <ArrowDownIcon />
             9.05%
-          </Badge>
+          </Badge> */}
         </div>
       </div>
     </div>

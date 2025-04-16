@@ -9,10 +9,38 @@ import Document from "../models/Document";
 import Attachment from "../models/Attachment";
 import { Op } from "sequelize";
 
+export const stats = async (req: Request, res: Response) => {
+  try {
+    let pending = await Application.count({
+      where: {
+        applicationStatus: ApplicationStatus.PENDING,
+      },
+    });
+    let rejected = await Application.count({
+      where: {
+        applicationStatus: ApplicationStatus.REJECTED,
+      },
+    });
+    let approved = await Application.count({
+      where: {
+        applicationStatus: ApplicationStatus.APPROVED,
+      },
+    });
+    responseHandler.success(res, "Fetched", {
+      stats: {
+        pending,
+        rejected,
+        approved,
+      },
+    });
+  } catch (error) {
+    responseHandler.error(res, error);
+  }
+};
 export const listApplications = async (req: Request, res: Response) => {
   try {
     let { status = [ApplicationStatus.PENDING] } = req.body;
-    
+
     let applications = await Application.findAll({
       where: {
         applicationStatus: {

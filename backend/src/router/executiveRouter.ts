@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as executiveController from "../controllers/executiveController";
 const executiveRouter = Router();
 
+executiveRouter.get("/stats", executiveController.stats);
 executiveRouter.post("/applications", executiveController.listApplications);
 executiveRouter.post(
   "/update-application",
