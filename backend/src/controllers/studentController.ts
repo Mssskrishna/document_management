@@ -11,11 +11,16 @@ import { Op } from "sequelize";
 export const listDocuments = async (req: Request, res: Response) => {
   try {
     let documents = await Document.findAll({
+      // include: {},
       where: {
         userId: req.appUser!.id,
       },
     });
-    responseHandler.success(res, "Fetched", documents);
+    const documentIds = documents.map(
+      (doc) => doc.dataValues.documentTypeId - 1
+    );
+    console.log("Document IDs: ", documentIds);
+    responseHandler.success(res, "Fetched", [documents, documentIds]);
   } catch (error) {
     responseHandler.error(res, error);
   }
@@ -109,6 +114,28 @@ export const applyForDocument = async (req: Request, res: Response) => {
       );
 
     responseHandler.success(res, "Application submitted");
+  } catch (error) {
+    responseHandler.error(res, error);
+  }
+};
+
+export const fetchAllDocumentTypes = async (req: Request, res: Response) => {
+  try {
+    const documents = await DocumentType.findAll({
+      where: {},
+    });
+    const result = documents.map((doc) => {
+      const docData = doc.toJSON();
+
+      let parsedPreRequiredTypes: number[] = [];
+
+      if (docData.preRequiredTypes) {
+        parsedPreRequiredTypes = JSON.parse(docData.preRequiredTypes);
+      }
+      return { ...docData, preRequiredTypesArray: parsedPreRequiredTypes };
+    });
+
+    responseHandler.success(res, "Fetched", result);
   } catch (error) {
     responseHandler.error(res, error);
   }

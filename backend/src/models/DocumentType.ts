@@ -6,7 +6,7 @@ export interface DocumentTypeAttributes {
   title: string;
   canGenerateDigitally: boolean;
   canGeneratePhysically: boolean;
-  preRequiredTypes?: string; //array of document type ids that are necessary for requesting document
+  preRequiredTypes ?: string; //array of document type ids that are necessary for requesting document
   templateName: string;
   multipleAllowed: boolean;
   departmentId: number;

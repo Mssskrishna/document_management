@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -13,13 +13,16 @@
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@react-oauth/google": "^0.12.1",
+    "@reduxjs/toolkit": "^2.6.1",
     "@tailwindcss/cli": "^4.0.14",
     "@tailwindcss/vite": "^4.0.14",
     "axios": "^1.8.4",
     "lucide-react": "^0.482.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.4.0",
+    "react-select": "^5.10.1",
     "react-toastify": "^11.0.5"
   },
   "devDependencies": {
