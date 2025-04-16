@@ -39,7 +39,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   const contentClasses = isFullscreen
     ? "w-full h-full"
-    : "relative w-full p-4 rounded-3xl bg-white dark:bg-gray-900";
+    : "relative w-full p-4 rounded-3xl bg-white dark:bg-gray-700";
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center">
@@ -61,6 +61,7 @@ export const Modal: React.FC<ModalProps> = ({
             className="absolute right-3 top-3 z-50 flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"
           >
             {/* Close SVG */}
+            X   
           </button>
         )}
         <div>{children}</div>

@@ -36,28 +36,28 @@ export default function ApplicationModalContent({
 
   return (
     <div className="p-4 max-h-[80vh] overflow-y-auto">
-      <h2 className="text-xl font-semibold mb-4">Application Details</h2>
+      <h2 className="text-xl text-white font-semibold mb-4">Application Details</h2>
 
       <div className="space-y-4 text-gray-800 dark:text-white">
         <div className="text-base">
-          <span className="text-gray-600">Applicant:</span>{" "}
+          <span className="text-gray-100">Applicant:</span>{" "}
           <span className="font-semibold">{application.user.name}</span> (
           <span className="font-semibold">{application.user.email}</span>)
         </div>
         <div className="text-base">
-          <span className="text-gray-600">Document Type:</span>{" "}
+          <span className="text-gray-100">Document Type:</span>{" "}
           <span className="font-semibold">
             {application.documentType.title}
           </span>
         </div>
         <div className="text-base">
-          <span className="text-gray-600">Status:</span>{" "}
+          <span className="text-gray-100">Status:</span>{" "}
           <span className="font-semibold">
             {ApplicationStatus[application.applicationStatus]}
           </span>
         </div>
         <div className="text-base">
-          <span className="text-gray-600">Requested At:</span>{" "}
+          <span className="text-gray-100">Requested At:</span>{" "}
           <span className="font-semibold">
             {createdAt.toLocaleString()} ({getTimeAgo(createdAt)})
           </span>
@@ -92,7 +92,7 @@ export default function ApplicationModalContent({
           Remarks
         </label>
         <textarea
-          className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm rounded p-2 resize-none"
+          className="w-full border border-gray-300 dark:border-gray-700 text-white bg-white dark:bg-gray-900 text-sm rounded p-2 resize-none"
           rows={4}
           placeholder="Enter remarks..."
           value={remarks}

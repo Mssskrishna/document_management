@@ -70,18 +70,18 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-gray-800 px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-dark text-gray-800 px-4">
       {/* Logo */}
       <img
-        src="/favicon.png" // Replace with your logo path
+        src="/images/logo/logo-icon.svg" // Replace with your logo path
         alt="Logo"
         className="h-20 mb-6"
       />
 
       {/* Title */}
-      <h1 className="text-3xl font-semibold mb-10 text-center">
+      <h1 className="text-3xl font-semibold mb-10 text-center text-white">
         Document Platform Executive Panel
-      </h1>
+      </h1> 
 
       {/* Google Login */}
       <GoogleOAuthProvider clientId={clientId}>

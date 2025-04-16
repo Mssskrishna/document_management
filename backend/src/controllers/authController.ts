@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { responseHandler } from "../utils/responseHandler";
 import { authClient } from "../config/oauthClient";
 import User from "../models/User";
+import Role from "../models/Role";
 
 //role
 export const verifyLogin = async (req: Request, res: Response) => {
@@ -27,12 +28,20 @@ export const verifyLogin = async (req: Request, res: Response) => {
     });
     if (!user) throw "Unauthorized";
 
+    let role = await Role.findOne({
+      where: {
+        id: user.dataValues.role ?? 0, //0 finds empty row
+      },
+    });
+
     responseHandler.success(res, "User authenticated", {
       data: {
         role: user.dataValues.role,
         email: user.dataValues.email,
         name: user.dataValues.name,
+        imageUrl: user.dataValues.imageUrl,
         hasExecutorAccess: user.dataValues.role !== null,
+        roleName: role ? role.dataValues.title : "",
       },
     });
   } catch (error) {
@@ -51,7 +60,7 @@ export const validateCredential = async (req: Request, res: Response) => {
     if (!payload) {
       throw "Unauthorized";
     }
-    const { email, name } = payload!;
+    const { email, name, picture } = payload!;
     if (!email) {
       throw "Unauthorized";
     }
@@ -61,14 +70,22 @@ export const validateCredential = async (req: Request, res: Response) => {
         email,
       },
     });
+    console.log(picture);
     if (!user) {
       //create user
       user = await User.create({
         email,
         role: null, // null student ,
         name: name ?? "kviqw9023",
+        imageUrl: picture ?? null,
       });
     }
+
+    let role = await Role.findOne({
+      where: {
+        id: user.dataValues.role ?? 0, //0 finds empty row
+      },
+    });
 
     const sessionID = jwt.sign(
       { userId: user.dataValues.id, email: user.dataValues.email },
@@ -89,7 +106,9 @@ export const validateCredential = async (req: Request, res: Response) => {
         role: user.dataValues.role,
         email: user.dataValues.email,
         name: user.dataValues.name,
+        imageUrl: user.dataValues.imageUrl,
         hasExecutorAccess: user.dataValues.role !== null,
+        roleName: role ? role.dataValues.title : "",
       },
     });
   } catch (error) {
