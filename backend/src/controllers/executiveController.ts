@@ -9,6 +9,34 @@ import Document from "../models/Document";
 import Attachment from "../models/Attachment";
 import { Op } from "sequelize";
 
+export const notifications = async (req: Request, res: Response) => {
+  //return recent certificate actions takes , approvals received
+  //i.e sorted by update time descending
+  try {
+    let applications = await Application.findAll({
+      where: {},
+      include: [
+        {
+          model: DocumentType,
+          as: "documentType",
+          where: {
+            departmentId: req.appUser!.role!.departmentId!,
+          },
+          required: true,
+        },
+        {
+          model: User,
+          as: "user",
+        },
+      ],
+      order: [["updatedAt", "DESC"]],
+      limit: 10,
+    });
+    responseHandler.success(res, "Fetched", applications);
+  } catch (error) {
+    responseHandler.error(res, error);
+  }
+};
 export const stats = async (req: Request, res: Response) => {
   try {
     let pending = await Application.count({

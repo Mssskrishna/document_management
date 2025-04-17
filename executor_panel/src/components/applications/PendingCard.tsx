@@ -1,4 +1,5 @@
 import { Application } from "../../enum/ApplicationsResponse";
+import { calculateDaysAgo } from "../../utils/utils";
 
 interface PendingCardProps {
   data: Application;
@@ -7,16 +8,16 @@ interface PendingCardProps {
 
 export default function PendingCard({ data, onView }: PendingCardProps) {
   return (
-    <div className="relative p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
+    <div className="relative p-5 rounded-2xl border border-gray-200 dark:border-gray-600 shadow-sm">
       <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-start">
         <div>
           <h4 className="text-lg font-semibold text-gray-800 dark:text-white">
-            {data.user.email}
+            {data.documentType.title}
           </h4>
 
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-gray-500 dark:text-gray-200">
                 Application ID
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white">
@@ -25,11 +26,17 @@ export default function PendingCard({ data, onView }: PendingCardProps) {
             </div>
 
             <div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Document
-              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-200">User</p>
               <p className="text-sm font-medium text-gray-800 dark:text-white">
-                {data.documentType.title}
+                {data.user.email}
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs text-gray-500 dark:text-gray-200">Date</p>
+              <p className="text-sm font-medium text-gray-800 dark:text-white">
+                {new Date(data.createdAt).toLocaleString()}
+                {""} &nbsp; ({calculateDaysAgo(data.createdAt)})
               </p>
             </div>
           </div>

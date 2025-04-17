@@ -94,6 +94,9 @@ export default function Pending() {
   return (
     <div className="relative p-4 h-[82vh]">
       {/* Toggle Buttons */}
+      <div className="flex-1/2 flex items-center mb-6">
+        <h2 className="text-2xl font-bold  text-white">Applications</h2>
+      </div>
       <div className="flex justify-end mb-4">
         <div className="inline-flex bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
           <button
