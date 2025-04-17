@@ -13,6 +13,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { BaseUrl } from "../utils/baseUrl";
+import { useSelector } from "react-redux";
 
 const statusColors = {
   0: "bg-amber-100 text-amber-500 border-amber-200",
@@ -32,8 +33,8 @@ const statusLabels = {
   2: "Rejected",
 };
 
-
 const Home = () => {
+  const user = useSelector((state) => state.user.data);
   // Certificate data states
   const [approvedCertificates, setApprovedCertificates] = useState([]);
   const [requestedCertificates, setRequestedCertificates] = useState([]);
@@ -150,6 +151,7 @@ const Home = () => {
 
   useEffect(() => {
     getCertificates();
+    console.log(user);
   }, []);
 
   // Render loading skeleton

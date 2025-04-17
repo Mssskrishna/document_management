@@ -15,30 +15,6 @@ import { useEffect, useState } from "react";
 import Document from "./components/Document";
 import ProtectedPage from "./components/ProtectedRoute";
 
-const RouteToaster = () => {
-  const location = useLocation();
-  const [visited, setVisited] = useState(new Set());
-
-  useEffect(() => {
-    const path = location.pathname;
-    if (!visited.has(path)) {
-      const messages = {
-        "/": "You're on the Home page.",
-        "/profile": "Here’s your Profile.",
-        "/certificate": "Request a certificate here.",
-        "/login": "Login or Logout from here.",
-        "/roles": "View available roles.",
-      };
-
-      if (messages[path]) {
-        toast.info(messages[path], { closeOnClick: true });
-        setVisited((prev) => new Set(prev).add(path));
-      }
-    }
-  }, [location, visited]);
-
-  return null;
-};
 const App = () => {
   const [initSet, setInitSet] = useState(0);
   useEffect(() => {
@@ -51,7 +27,6 @@ const App = () => {
     <Router>
       <ToastContainer />
 
-      <RouteToaster />
       <div className="flex">
         <Sidebar />
         <div className="flex-1">

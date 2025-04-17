@@ -53,6 +53,16 @@ export const stats = async (req: Request, res: Response) => {
       where: {
         applicationStatus: ApplicationStatus.APPROVED,
       },
+      include : [
+        {
+          model: DocumentType,
+          as: "documentType",
+          where: {
+            departmentId: req.appUser!.role!.departmentId!,
+          },
+          required: true,
+        },
+      ]
     });
     responseHandler.success(res, "Fetched", {
       stats: {
@@ -69,6 +79,7 @@ export const listApplications = async (req: Request, res: Response) => {
   try {
     let { status = [ApplicationStatus.PENDING] } = req.body;
 
+    console.log(status)
     let applications = await Application.findAll({
       where: {
         applicationStatus: {

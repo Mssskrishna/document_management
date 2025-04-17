@@ -2,6 +2,8 @@ import { Paperclip } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ApplicationStatus } from "../enum/ApplicationStatus";
 import { Application } from "../enum/ApplicationsResponse";
+import { baseUrl } from "../utils/constants";
+import axios from "axios";
 
 interface Props {
   application: Application;
@@ -20,6 +22,34 @@ function getTimeAgo(date: Date) {
   } ago`;
 }
 
+const requestDownload = async (documentId: number) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/file/initiate-download`,
+      {
+        attachmentId: documentId,
+      },
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+
+    const token = response.data.body.accessToken;
+
+    // Initiate download
+    const downloadUrl = `${baseUrl}/file/download/${token}`;
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = ""; // optional, lets browser treat it as download
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error("Download failed:", error);
+    alert("Failed to download certificate. Please try again.");
+  }
+};
 export default function ApplicationModalContent({
   application,
   onApprove,
@@ -36,7 +66,9 @@ export default function ApplicationModalContent({
 
   return (
     <div className="p-4 max-h-[80vh] overflow-y-auto">
-      <h2 className="text-xl text-white font-semibold mb-4">Application Details</h2>
+      <h2 className="text-xl text-white font-semibold mb-4">
+        Application Details
+      </h2>
 
       <div className="space-y-4 text-gray-800 dark:text-white">
         <div className="text-base">
@@ -79,7 +111,13 @@ export default function ApplicationModalContent({
               {application.attachment.map((file) => (
                 <li key={file.id} className="flex items-center gap-2 text-sm">
                   <Paperclip className="w-4 h-4 text-gray-500" />
-                  <span>{file.name}</span>
+                  <span
+                    onClick={() => {
+                      requestDownload(file.id);
+                    }}
+                  >
+                    {file.name}
+                  </span>
                 </li>
               ))}
             </ul>

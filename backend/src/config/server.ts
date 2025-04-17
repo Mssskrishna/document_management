@@ -20,11 +20,11 @@ const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
 const corsOptions = {
-  // origin: (_origin: any, callback: (arg0: any, arg1: boolean) => void) => {
-  //   // Check if the origin is in the list of allowed origins
-  //   callback(null, true);
-  // },
-  origin: "http://localhost:5173",
+  origin: (_origin: any, callback: (arg0: any, arg1: boolean) => void) => {
+    // Check if the origin is in the list of allowed origins
+    callback(null, true);
+  },
+  // origin: "http://localhost:5173",
   methods: "GET,PUT,POST,OPTIONS", // Specify allowed methods
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],

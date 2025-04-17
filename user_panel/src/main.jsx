@@ -8,12 +8,10 @@ import { store } from "./store/store.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <Provider store={store}>
-        {/* <PersistGate loading={<div>Loading...</div>} persistor={persistor}> */}
-        {/* </PersistGate> */}
+    <Provider store={store}>
+      <AuthProvider>
         <App />
-      </Provider>
-    </AuthProvider>
+      </AuthProvider>
+    </Provider>
   </StrictMode>
 );

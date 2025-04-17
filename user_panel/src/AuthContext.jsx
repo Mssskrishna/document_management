@@ -1,26 +1,25 @@
 import { useEffect, createContext, useState, useContext } from "react";
 import axios from "axios";
 import { BaseUrl } from "./utils/baseUrl";
+import { useDispatch } from "react-redux";
+import { setLoggedIn, setUser } from "./features/userSlice";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Track loading state
-
+  const dispatch = useDispatch();
   const authCheck = async () => {
     try {
       const response = await axios.get(`${BaseUrl}/auth/verify-login`, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      setUser(response.data.body.data);
+      dispatch(setUser(response.data.body.data));
+      dispatch(setLoggedIn(true));
     } catch (error) {
       console.error(
         "Error:",
         error.response ? error.response.data : error.message
       );
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -29,7 +28,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, authCheck }}>
+    <AuthContext.Provider value={{  authCheck }}>
       {children}
     </AuthContext.Provider>
   );

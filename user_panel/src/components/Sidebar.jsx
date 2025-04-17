@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Home, User, Scroll, Menu, LogOut, LogIn, X } from "lucide-react";
 import { useAuth } from "../AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { BaseUrl } from "../utils/baseUrl";
+import { setLoggedIn, setUser } from "../features/userSlice";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [isMobileView, setIsMobileView] = useState(false);
-  const { user } = useAuth();
+  // const {user}
+  const user = useSelector((state) => state.user.data);
   const location = useLocation();
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobileView(window.innerWidth < 768);
@@ -123,7 +129,7 @@ const Sidebar = () => {
 };
 
 // Sidebar Item Component with React Router Link
-const SidebarItem = ({ to, icon, text, isOpen }) => {
+const SidebarItem = ({ to, icon, text, isOpen, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
