@@ -7,15 +7,17 @@ import * as dotenv from "dotenv";
 import studentRouter from "../router/studentRouter";
 import authRouter from "../router/authRouter";
 import executiveRouter from "../router/executiveRouter";
-import { isAuthenticated } from "../middleware/authMiddleware";
+import {
+  isAuthenticated,
+  isExecutor,
+  isStudent,
+} from "../middleware/authMiddleware";
 import cookieParser from "cookie-parser";
 import filesRouter from "../router/filesRouter";
 
 dotenv.config();
 // import publicRouter from "../router/publicRouter";
 const app = express();
-
-
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -41,8 +43,8 @@ app.use(
   })
 );
 app.use("/auth", authRouter);
-app.use("/student", isAuthenticated, studentRouter);
-app.use("/executive", isAuthenticated, executiveRouter);
+app.use("/student", isAuthenticated, isStudent, studentRouter);
+app.use("/executive", isAuthenticated, isExecutor, executiveRouter);
 app.use("/file", filesRouter);
 
 const server = createServer(app);

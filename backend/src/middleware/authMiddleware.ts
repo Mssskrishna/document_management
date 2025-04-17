@@ -54,3 +54,35 @@ export const isAuthenticated = async (
     next(error);
   }
 };
+
+export const isExecutor = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.appUser && req.appUser.role !== null) {
+      next();
+    } else {
+      throw "UnAuthorized";
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const isStudent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.appUser && req.appUser.role === null) {
+      next();
+    } else {
+      throw "UnAuthorized";
+    }
+  } catch (error) {
+    next(error);
+  }
+};
