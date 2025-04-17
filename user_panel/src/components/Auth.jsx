@@ -1,7 +1,7 @@
 import React from "react";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useAuth } from "../AuthContext";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BaseUrl } from "../utils/baseUrl";
@@ -13,7 +13,7 @@ const Auth = () => {
 
   const handleSuccess = async (credentialResponse) => {
     console.log("Google Login Success:", credentialResponse);
-    
+
     if (credentialResponse.credential) {
       try {
         const response = await axios.post(
@@ -26,7 +26,18 @@ const Auth = () => {
         );
 
         console.log(response.data);
-
+        if (!response.data.role) {
+          toast.error("Page is accessbile only for user");
+          await axios.post(
+            `${BaseUrl}/auth/login`,
+            {},
+            {
+              withCredentials: true,
+            }
+          );
+          navigate("/login");
+          return;
+        }
         if (response.status === 200) {
           await authCheck();
           console.log("Auth check");
@@ -35,7 +46,6 @@ const Auth = () => {
           toast.success(
             "Google Login Success , you can request your certificate now"
           );
-      
         } else {
           console.error("Login Failed:", response.data);
         }

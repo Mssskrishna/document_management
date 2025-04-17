@@ -36,7 +36,9 @@ export default function ApplicationModalContent({
 
   return (
     <div className="p-4 max-h-[80vh] overflow-y-auto">
-      <h2 className="text-xl text-white font-semibold mb-4">Application Details</h2>
+      <h2 className="text-xl text-white font-semibold mb-4">
+        Application Details
+      </h2>
 
       <div className="space-y-4 text-gray-800 dark:text-white">
         <div className="text-base">
@@ -100,28 +102,30 @@ export default function ApplicationModalContent({
         />
       </div>
 
-      <div className="mt-4 flex justify-end gap-2">
-        <button
-          className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-100"
-          onClick={onCancel}
-        >
-          Cancel
-        </button>
+      {application.applicationStatus === ApplicationStatus.PENDING && (
+        <div className="mt-4 flex justify-end gap-2">
+          <button
+            className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-100"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
 
-        <button
-          className="px-4 py-2 text-sm text-red-700 bg-red-100 border border-red-200 rounded hover:bg-red-200"
-          onClick={() => onReject(remarks)}
-        >
-          Reject
-        </button>
+          <button
+            className="px-4 py-2 text-sm text-red-700 bg-red-100 border border-red-200 rounded hover:bg-red-200"
+            onClick={() => onReject(remarks)}
+          >
+            Reject
+          </button>
 
-        <button
-          className="px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-700"
-          onClick={() => onApprove(remarks)}
-        >
-          Approve
-        </button>
-      </div>
+          <button
+            className="px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-700"
+            onClick={() => onApprove(remarks)}
+          >
+            Approve
+          </button>
+        </div>
+      )}
     </div>
   );
 }
