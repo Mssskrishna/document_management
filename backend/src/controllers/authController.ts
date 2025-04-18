@@ -4,6 +4,7 @@ import { responseHandler } from "../utils/responseHandler";
 import { authClient } from "../config/oauthClient";
 import User from "../models/User";
 import Role from "../models/Role";
+import { adminEmail } from "../utils/constants";
 
 //role
 export const verifyLogin = async (req: Request, res: Response) => {
@@ -42,6 +43,7 @@ export const verifyLogin = async (req: Request, res: Response) => {
         imageUrl: user.dataValues.imageUrl,
         hasExecutorAccess: user.dataValues.role !== null,
         roleName: role ? role.dataValues.title : "",
+        isAdmin: user.dataValues.email === adminEmail,
       },
     });
   } catch (error) {
@@ -109,6 +111,7 @@ export const validateCredential = async (req: Request, res: Response) => {
         imageUrl: user.dataValues.imageUrl,
         hasExecutorAccess: user.dataValues.role !== null,
         roleName: role ? role.dataValues.title : "",
+        isAdmin: user.dataValues.email === adminEmail,
       },
     });
   } catch (error) {

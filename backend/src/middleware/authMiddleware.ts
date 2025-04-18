@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 import Role from "../models/Role";
+import { adminEmail } from "../utils/constants";
 
 export const isAuthenticated = async (
   req: Request,
@@ -70,7 +71,21 @@ export const isExecutor = async (
     next(error);
   }
 };
-
+export const isAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    if (req.email === adminEmail) {
+      next();
+    } else {
+      throw "Unauthorized";
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 export const isStudent = async (
   req: Request,
   res: Response,

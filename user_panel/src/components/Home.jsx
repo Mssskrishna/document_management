@@ -36,24 +36,7 @@ const statusLabels = {
 const Home = () => {
   const user = useSelector((state) => state.user.data);
   // Certificate data states
-  const [approvedCertificates, setApprovedCertificates] = useState([{
-    "id": 27,
-    "userId": 1,
-    "documentTypeId": 2,
-    "applicationStatus": 0,
-    "issuedDocumentId": null,
-    "arpprovedBy": null,
-    "coverLetter": "",
-    "remarks": null,
-    "createdAt": "2025-04-13T05:58:42.000Z",
-    "updatedAt": "2025-04-13T05:58:42.000Z",
-    "attachment": [
-        {
-            "id": 42,
-            "name": "Resume.pdf"
-        }
-    ]
-},]);
+  const [approvedCertificates, setApprovedCertificates] = useState([]);
   const [requestedCertificates, setRequestedCertificates] = useState([]);
   const [rejectedCertificates, setRejectedCertificates] = useState([]);
   const [certificates, setCertificates] = useState([]);
@@ -128,7 +111,7 @@ const Home = () => {
         },
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true, //cookie backend
+          withCredentials: true,
         }
       );
 

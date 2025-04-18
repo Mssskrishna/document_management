@@ -8,12 +8,14 @@ import studentRouter from "../router/studentRouter";
 import authRouter from "../router/authRouter";
 import executiveRouter from "../router/executiveRouter";
 import {
+  isAdmin,
   isAuthenticated,
   isExecutor,
   isStudent,
 } from "../middleware/authMiddleware";
 import cookieParser from "cookie-parser";
 import filesRouter from "../router/filesRouter";
+import adminRouter from "../router/adminRouter";
 
 dotenv.config();
 // import publicRouter from "../router/publicRouter";
@@ -46,6 +48,7 @@ app.use("/auth", authRouter);
 app.use("/student", isAuthenticated, isStudent, studentRouter);
 app.use("/executive", isAuthenticated, isExecutor, executiveRouter);
 app.use("/file", filesRouter);
+app.use("/admin", isAuthenticated, isAdmin, adminRouter);
 
 const server = createServer(app);
 export { app };
