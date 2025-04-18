@@ -120,13 +120,13 @@ const Certificate = () => {
       }
     }
     if (change) return;
-    console.log(requiredDocs, documents);
+    console.log(requiredDocs, documents,selectedCertificate);
     setIsSubmitting(true);
     try {
       const response = await axios.post(
         "http://localhost:8080/student/request-application",
         {
-          documentTypeId: selectedCertificate + 1,
+          documentTypeId: Number(selectedCertificate) + 1,
           coverLetter: subject,
           attachmentIds: uploadedFiles.filter((id) => id), // Filter out any undefined values
         },
@@ -145,6 +145,7 @@ const Certificate = () => {
       setSubject("");
       setSelectedCertificate(-1);
       setFileNames({});
+      setAttachments([])
     } catch (error) {
       console.error("Error submitting request:", error);
       toast.error(error.response.data.message || "Failed to submit request.");
@@ -182,7 +183,7 @@ const Certificate = () => {
   };
 
   return (
-    <div className=" flex items-center justify-center p-6">
+    <div className=" flex items-center justify-center p-6 bg-gray-900">
       <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-xl">
         <div className="mb-6 text-center">
           <h2 className="text-2xl font-bold text-gray-800">

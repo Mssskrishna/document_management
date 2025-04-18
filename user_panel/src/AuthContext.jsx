@@ -3,9 +3,12 @@ import axios from "axios";
 import { BaseUrl } from "./utils/baseUrl";
 import { useDispatch } from "react-redux";
 import { setLoggedIn, setUser } from "./features/userSlice";
+import { useNavigate } from "react-router-dom";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const authCheck = async () => {
     try {
@@ -16,6 +19,7 @@ export const AuthProvider = ({ children }) => {
       dispatch(setUser(response.data.body.data));
       dispatch(setLoggedIn(true));
     } catch (error) {
+      navigate("/login")
       console.error(
         "Error:",
         error.response ? error.response.data : error.message

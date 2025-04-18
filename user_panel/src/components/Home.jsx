@@ -36,7 +36,24 @@ const statusLabels = {
 const Home = () => {
   const user = useSelector((state) => state.user.data);
   // Certificate data states
-  const [approvedCertificates, setApprovedCertificates] = useState([]);
+  const [approvedCertificates, setApprovedCertificates] = useState([{
+    "id": 27,
+    "userId": 1,
+    "documentTypeId": 2,
+    "applicationStatus": 0,
+    "issuedDocumentId": null,
+    "arpprovedBy": null,
+    "coverLetter": "",
+    "remarks": null,
+    "createdAt": "2025-04-13T05:58:42.000Z",
+    "updatedAt": "2025-04-13T05:58:42.000Z",
+    "attachment": [
+        {
+            "id": 42,
+            "name": "Resume.pdf"
+        }
+    ]
+},]);
   const [requestedCertificates, setRequestedCertificates] = useState([]);
   const [rejectedCertificates, setRejectedCertificates] = useState([]);
   const [certificates, setCertificates] = useState([]);
@@ -111,7 +128,7 @@ const Home = () => {
         },
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true,
+          withCredentials: true, //cookie backend
         }
       );
 
@@ -228,7 +245,7 @@ const Home = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-900 p-6 md:p-8">
+    <div className="min-h-screen bg-gray-900 p-6 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
@@ -263,8 +280,8 @@ const Home = () => {
         {/* Dashboard Summary */}
 
         {/* Approved Certificates Section */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8 transform transition-all duration-300 hover:shadow-xl">
-          <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 transform transition-all duration-300 hover:shadow-xl">
+          <div className="bg-green-500 from-green-500 to-green-600 px-6 py-4">
             <h2 className="text-xl font-bold text-white flex items-center">
               <CheckCircle className="w-5 h-5 mr-2" />
               Approved Certificates
@@ -277,7 +294,7 @@ const Home = () => {
             ) : approvedCertificates.length > 0 ? (
               <>
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full overflow-scroll">
                     <thead>
                       <tr className="bg-gray-50">
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -350,8 +367,8 @@ const Home = () => {
         </div>
 
         {/* Requested Certificates Section */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8 transform transition-all duration-300 hover:shadow-xl">
-          <div className="bg-gradient-to-r from-amber-500 to-amber-600 px-6 py-4">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 transform transition-all duration-300 hover:shadow-xl">
+          <div className="bg-orange-300 from-amber-500 to-amber-600 px-6 py-4">
             <h2 className="text-xl font-bold text-white flex items-center">
               <Clock className="w-5 h-5 mr-2" />
               Pending Certificates
@@ -364,7 +381,7 @@ const Home = () => {
             ) : requestedCertificates.length > 0 ? (
               <>
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="w-full overflow-scroll">
                     <thead>
                       <tr className="bg-gray-50">
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -429,8 +446,8 @@ const Home = () => {
         </div>
 
         {/* Rejected Certificates Section */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8 transform transition-all duration-300 hover:shadow-xl">
-          <div className="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 transform transition-all duration-300 hover:shadow-xl">
+          <div className="bg-red-500 from-red-500 to-red-600 px-6 py-4">
             <h2 className="text-xl font-bold text-white flex items-center">
               <XCircle className="w-5 h-5 mr-2" />
               Rejected Certificates
@@ -442,8 +459,8 @@ const Home = () => {
               renderSkeleton()
             ) : rejectedCertificates.length > 0 ? (
               <>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
+                <div className="overflow-x-scroll">
+                  <table className="w-full overflow-scroll">
                     <thead>
                       <tr className="bg-gray-50">
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">

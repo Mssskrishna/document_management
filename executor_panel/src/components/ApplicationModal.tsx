@@ -124,19 +124,29 @@ export default function ApplicationModalContent({
           </div>
         )}
       </div>
-
-      <div className="mt-6">
-        <label className="text-sm font-medium mb-1 block text-gray-700 dark:text-gray-300">
-          Remarks
-        </label>
-        <textarea
-          className="w-full border border-gray-300 dark:border-gray-700 text-white bg-white dark:bg-gray-900 text-sm rounded p-2 resize-none"
-          rows={4}
-          placeholder="Enter remarks..."
-          value={remarks}
-          onChange={(e) => setRemarks(e.target.value)}
-        />
-      </div>
+      {application.applicationStatus === ApplicationStatus.PENDING ? (
+        <div className="mt-6">
+          <label className="text-sm font-medium mb-1 block text-gray-700 dark:text-gray-300">
+            Remarks
+          </label>
+          <textarea
+            className="w-full border border-gray-300 dark:border-gray-700 text-white bg-white dark:bg-gray-900 text-sm rounded p-2 resize-none"
+            rows={4}
+            placeholder="Enter remarks..."
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
+          />
+        </div>
+      ) : (
+        <div className="mt-6">
+          <label className="text-sm font-medium mb-1 block text-gray-700 dark:text-gray-300">
+            Remarks
+          </label>
+          <div className="bg-gray-100 dark:bg-gray-400 p-3 rounded text-sm whitespace-pre-wrap">
+            {application.remarks}
+          </div>
+        </div>
+      )}
 
       {application.applicationStatus === ApplicationStatus.PENDING && (
         <div className="mt-4 flex justify-end gap-2">

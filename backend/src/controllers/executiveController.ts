@@ -42,12 +42,33 @@ export const stats = async (req: Request, res: Response) => {
     let pending = await Application.count({
       where: {
         applicationStatus: ApplicationStatus.PENDING,
+        
       },
+      include : [
+        {
+          model: DocumentType,
+          as: "documentType",
+          where: {
+            departmentId: req.appUser!.role!.departmentId!,
+          },
+          required: true,
+        },
+      ]
     });
     let rejected = await Application.count({
       where: {
         applicationStatus: ApplicationStatus.REJECTED,
       },
+      include : [
+        {
+          model: DocumentType,
+          as: "documentType",
+          where: {
+            departmentId: req.appUser!.role!.departmentId!,
+          },
+          required: true,
+        },
+      ]
     });
     let approved = await Application.count({
       where: {

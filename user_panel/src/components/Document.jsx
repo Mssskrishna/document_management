@@ -26,6 +26,34 @@ export default function Document() {
   const [certificates, setCertificates] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const requestDownload = async (documentId) => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/file/initiate-download`,
+        {
+          documentId: documentId,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      const token = response.data.body.accessToken;
+
+      // Initiate download
+      const downloadUrl = `http://localhost:8080/file/download/${token}`;
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = ""; // optional, lets browser treat it as download
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Download failed:", error);
+      alert("Failed to download certificate. Please try again.");
+    }
+  };
   const [loading, setLoading] = useState(true);
   const getCertificates = async () => {
     setLoading(true);
@@ -87,6 +115,8 @@ export default function Document() {
           withCredentials: true,
         }
       );
+
+      console.log(response.data.body);
       return response.data.body;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -101,7 +131,7 @@ export default function Document() {
     if (total <= 1) return null;
 
     return (
-      <div className="flex items-center justify-between mt-4">
+      <div className="flex items-center justify-between mt-4 ">
         <span className="text-sm text-gray-500">
           Page {current} of {total}
         </span>
@@ -156,7 +186,7 @@ export default function Document() {
     </div>
   );
   return (
-    <div className="m-5">
+    <div className="h-screen p-5 bg-gray-900">
       {/* Approved Certificates Section */}
       <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-8 transform transition-all duration-300 hover:shadow-xl">
         <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">

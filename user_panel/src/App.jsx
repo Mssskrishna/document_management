@@ -16,20 +16,15 @@ import Document from "./components/Document";
 import ProtectedPage from "./components/ProtectedRoute";
 
 const App = () => {
-  const [initSet, setInitSet] = useState(0);
-  useEffect(() => {
-    if (initSet == 0) {
-      toast.info("Welcome to the Student Panel");
-    }
-    setInitSet(1);
-  });
-  return (
-    <Router>
-      <ToastContainer />
+  const location = useLocation();
+  const isLogin = location.pathname === "/login";
 
+  return (
+    <div>
+      <ToastContainer />
       <div className="flex">
         <Sidebar />
-        <div className="flex-1">
+        <div className={`flex-1 ${isLogin ? "" : "md:ml-64"}`}>
           <Routes>
             <Route
               path="/documents"
@@ -70,7 +65,7 @@ const App = () => {
           </Routes>
         </div>
       </div>
-    </Router>
+    </div>
   );
 };
 

@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { Home, User, Scroll, Menu, LogOut, LogIn, X } from "lucide-react";
 import { useAuth } from "../AuthContext";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +20,21 @@ const Sidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      // Optional: Make a request to logout from backend if needed
+      await axios.post(`${BaseUrl}/auth/logout`, {}, { withCredentials: true });
+
+      // Clear Redux state
+      dispatch(setUser(null));
+      dispatch(setLoggedIn(false));
+
+      // Navigate to login or home
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobileView(window.innerWidth < 768);
@@ -39,6 +59,7 @@ const Sidebar = () => {
     setIsOpen(!isOpen);
   };
 
+  const isLogin = location.pathname === "/login";
   return (
     <>
       {/* Mobile Menu Button - Only visible on mobile */}
@@ -60,9 +81,11 @@ const Sidebar = () => {
       {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 bg-gray-900 text-white z-40 transition-all duration-300 ease-in-out transform 
+          border-r border-gray-800
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} 
           ${isOpen ? "w-64" : "w-20"} 
-          md:relative md:transform-none min-h-screen`}
+          ${isLogin ? "hidden" : ""}
+          `}
       >
         <div className="flex items-center justify-between p-5 h-16 border-b border-gray-800">
           <h1
@@ -70,7 +93,14 @@ const Sidebar = () => {
               !isOpen && "opacity-0 md:opacity-0 invisible md:invisible"
             }`}
           >
-            Dashboard
+            <div className="flex gap-2 items-center">
+              <img
+                src="/images/logo.svg" // Replace with your logo path
+                alt="Logo"
+                className="h-6"
+              />
+              Dashboard
+            </div>
           </h1>
         </div>
 
@@ -96,12 +126,24 @@ const Sidebar = () => {
             isOpen={isOpen}
           />
 
-          <SidebarItem
-            to="/login"
-            icon={user ? <LogOut /> : <LogIn />}
-            text={user ? "Log Out" : "Log In"}
-            isOpen={isOpen}
-          />
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className={`w-full text-left flex items-center space-x-3 px-3 py-3 rounded-md transition-colors duration-200 text-gray-300 hover:bg-gray-800 hover:text-white`}
+            >
+              <span className="text-xl flex-shrink-0">
+                <LogOut />
+              </span>
+              {isOpen && <span className="text-sm font-medium">Log Out</span>}
+            </button>
+          ) : (
+            <SidebarItem
+              to="/login"
+              icon={<LogIn />}
+              text="Log In"
+              isOpen={isOpen}
+            />
+          )}
         </nav>
 
         {/* Mobile close button at bottom */}
@@ -129,10 +171,9 @@ const Sidebar = () => {
 };
 
 // Sidebar Item Component with React Router Link
-const SidebarItem = ({ to, icon, text, isOpen, onClick }) => {
+const SidebarItem = ({ to, icon, text, isOpen }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
-
   return (
     <Link
       to={to}
@@ -141,7 +182,8 @@ const SidebarItem = ({ to, icon, text, isOpen, onClick }) => {
           isActive
             ? "bg-gray-800 text-white"
             : "text-gray-300 hover:bg-gray-800 hover:text-white"
-        }`}
+        }
+      `}
     >
       <span className="text-xl flex-shrink-0">{icon}</span>
       {isOpen && <span className="text-sm font-medium">{text}</span>}

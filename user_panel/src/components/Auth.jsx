@@ -1,10 +1,6 @@
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
-=======
 import { useAuth } from "../AuthContext";
 import { redirect, useNavigate } from "react-router-dom";
->>>>>>> fc8b92eac009261915429e7b9ef8e12ccd50cd3b
 import axios from "axios";
 import { BaseUrl } from "../utils/baseUrl";
 import { toast } from "react-toastify";
@@ -47,7 +43,7 @@ const SignInForm = () => {
         const data = response.data;
         const user = data.body.data;
 
-        if (!user.hasExecutorAccess) {
+        if (user.hasExecutorAccess) {
           toast.error(
             "Unable to login into panel , please try with different email"
           );
